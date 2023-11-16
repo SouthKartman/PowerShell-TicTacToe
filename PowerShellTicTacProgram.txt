@@ -1,0 +1,447 @@
+ function Draw-Board {
+>>     Write-Host " $($board[0]) | $($board[1]) | $($board[2]) "
+>>     Write-Host "-----------"
+>>     Write-Host " $($board[3]) | $($board[4]) | $($board[5]) "
+>>     Write-Host "-----------"
+>>     Write-Host " $($board[6]) | $($board[7]) | $($board[8]) "
+>> }
+>>
+>> function Check-Win {
+>>     # Проверка по горизонтали
+>>     for ($i = 0; $i -lt 9; $i += 3) {
+>>         if ($board[$i] -eq $board[$i + 1] -and $board[$i + 1] -eq $board[$i + 2]) {
+>>             return $true
+>>         }
+>>     }
+>>
+>>     # Проверка по вертикали
+>>     for ($i = 0; $i -lt 3; $i++) {
+>>         if ($board[$i] -eq $board[$i + 3] -and $board[$i + 3] -eq $board[$i + 6]) {
+>>             return $true
+>>         }
+>>     }
+>>
+>>     # Проверка по диагонали
+>>     if ($board[0] -eq $board[4] -and $board[4] -eq $board[8]) {
+>>         return $true
+>>     }
+>>     if ($board[2] -eq $board[4] -and $board[4] -eq $board[6]) {
+>>         return $true
+>>     }
+>>
+>>     return $false
+>> }
+>>
+>> function Is-Board-Full {
+>>     return -not $board.Contains(' ')
+>> }
+>>
+>> function Player-Turn {
+>>     do {
+>>         $choice = Read-Host "Игрок $player, введите номер ячейки (1-9):"
+>>         $choice = [int]$choice - 1
+>>     } while ($choice -lt 0 -or $choice -ge 9 -or $board[$choice] -ne ' ')
+>>
+>>     $board[$choice] = $players[$player]
+>> }
+>>
+>> function AI-Turn {
+>>     $choice = Get-Random -Minimum 0 -Maximum 9
+>>     while ($board[$choice] -ne ' ') {
+>>         $choice = Get-Random -Minimum 0 -Maximum 9
+>>     }
+>>
+>>     $board[$choice] = $players[$player]
+>> }
+>>
+>> # Инициализация
+>> $board = @(' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ')
+>> $players = @('X', 'O')
+>> $player = 0
+>>
+>> # Основной цикл игры
+>> do {
+>>     Draw-Board
+>>     if ($player -eq 0) {
+>>         Player-Turn
+>>     } else {
+>>         AI-Turn
+>>     }
+>>
+>>     if (Check-Win) {
+>>         Draw-Board
+>>         Write-Host "Игрок $($players[$player]) побеждает!"
+>>         break
+>>     }
+>>
+>>     if (Is-Board-Full) {
+>>         Draw-Board
+>>         Write-Host "Ничья!"
+>>         break
+>>     }
+>>
+>>     $player = 1 - $player
+>> } while ($true)
+   |   |
+-----------
+   |   |
+-----------
+   |   |
+Игрок 0, введите номер ячейки (1-9):: 2
+   | X |
+-----------
+   |   |
+-----------
+   |   |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+с интерфейсом
+<# Tic Tac Toe Game
+Created by powersjo. 
+#>
+
+Add-Type -AssemblyName System.Windows.Forms
+[System.Windows.Forms.Application]::EnableVisualStyles()
+
+$Path = "$Home\Documents"
+if(!(Test-Path -Path $Path\TicTacToe)){
+    New-Item -Name TicTacToe -Path $Path -ItemType Directory    
+}
+if(!(Test-Path -Path $Path\TicTacToe\Board)){
+    New-Item -Name Board -Path $Path\TicTacToe -ItemType Directory    
+}
+if(!(Test-Path -Path $Path\TicTacToe\Board\1.txt)){
+    New-Item $Path\TicTacToe\Board -ItemType file -Name 1.txt
+}
+if(!(Test-Path -Path $Path\TicTacToe\Board\2.txt)){
+    New-Item $Path\TicTacToe\Board -ItemType file -Name 2.txt
+}
+if(!(Test-Path -Path $Path\TicTacToe\Board\3.txt)){
+    New-Item $Path\TicTacToe\Board -ItemType file -Name 3.txt
+}
+if(!(Test-Path -Path $Path\TicTacToe\Board\4.txt)){
+    New-Item $Path\TicTacToe\Board -ItemType file -Name 4.txt
+}
+if(!(Test-Path -Path $Path\TicTacToe\Board\5.txt)){
+    New-Item $Path\TicTacToe\Board -ItemType file -Name 5.txt
+}
+if(!(Test-Path -Path $Path\TicTacToe\Board\6.txt)){
+    New-Item $Path\TicTacToe\Board -ItemType file -Name 6.txt
+}
+if(!(Test-Path -Path $Path\TicTacToe\Board\7.txt)){
+    New-Item $Path\TicTacToe\Board -ItemType file -Name 7.txt
+}
+if(!(Test-Path -Path $Path\TicTacToe\Board\8.txt)){
+    New-Item $Path\TicTacToe\Board -ItemType file -Name 8.txt
+}
+if(!(Test-Path -Path $Path\TicTacToe\Board\9.txt)){
+    New-Item $Path\TicTacToe\Board -ItemType file -Name 9.txt
+}
+if(!(Test-Path -Path $Path\TicTacToe\player.txt)){
+    New-Item $Path\TicTacToe -ItemType file -Name player.txt
+}
+
+Set-Content $Path\TicTacToe\player.txt '1'
+Set-Content $Path\TicTacToe\Board\1.txt '0'
+Set-Content $Path\TicTacToe\Board\2.txt '0'
+Set-Content $Path\TicTacToe\Board\3.txt '0'
+Set-Content $Path\TicTacToe\Board\4.txt '0'
+Set-Content $Path\TicTacToe\Board\5.txt '0'
+Set-Content $Path\TicTacToe\Board\6.txt '0'
+Set-Content $Path\TicTacToe\Board\7.txt '0'
+Set-Content $Path\TicTacToe\Board\8.txt '0'
+Set-Content $Path\TicTacToe\Board\9.txt '0'
+
+$Form                            = New-Object system.Windows.Forms.Form
+$Form.ClientSize                 = '380,290'
+$Form.text                       = "Form"
+$Form.TopMost                    = $false
+
+$Button1                         = New-Object system.Windows.Forms.Button
+$Button1.text                    = ""
+$Button1.width                   = 30
+$Button1.height                  = 30
+$Button1.location                = New-Object System.Drawing.Point(115,64)
+$Button1.Font                    = 'Microsoft Sans Serif,10'
+
+$Button2                         = New-Object system.Windows.Forms.Button
+$Button2.text                    = ""
+$Button2.width                   = 30
+$Button2.height                  = 30
+$Button2.location                = New-Object System.Drawing.Point(187,64)
+$Button2.Font                    = 'Microsoft Sans Serif,10'
+
+$Button3                         = New-Object system.Windows.Forms.Button
+$Button3.text                    = ""
+$Button3.width                   = 30
+$Button3.height                  = 30
+$Button3.location                = New-Object System.Drawing.Point(260,64)
+$Button3.Font                    = 'Microsoft Sans Serif,10'
+
+$Button4                         = New-Object system.Windows.Forms.Button
+$Button4.text                    = ""
+$Button4.width                   = 30
+$Button4.height                  = 30
+$Button4.location                = New-Object System.Drawing.Point(115,111)
+$Button4.Font                    = 'Microsoft Sans Serif,10'
+
+$Button5                         = New-Object system.Windows.Forms.Button
+$Button5.text                    = ""
+$Button5.width                   = 30
+$Button5.height                  = 30
+$Button5.location                = New-Object System.Drawing.Point(187,111)
+$Button5.Font                    = 'Microsoft Sans Serif,10'
+
+$Button6                         = New-Object system.Windows.Forms.Button
+$Button6.text                    = ""
+$Button6.width                   = 30
+$Button6.height                  = 30
+$Button6.location                = New-Object System.Drawing.Point(260,111)
+$Button6.Font                    = 'Microsoft Sans Serif,10'
+
+$Button7                         = New-Object system.Windows.Forms.Button
+$Button7.text                    = ""
+$Button7.width                   = 30
+$Button7.height                  = 30
+$Button7.location                = New-Object System.Drawing.Point(260,157)
+$Button7.Font                    = 'Microsoft Sans Serif,10'
+
+$Button8                         = New-Object system.Windows.Forms.Button
+$Button8.text                    = ""
+$Button8.width                   = 30
+$Button8.height                  = 30
+$Button8.location                = New-Object System.Drawing.Point(187,157)
+$Button8.Font                    = 'Microsoft Sans Serif,10'
+
+$Button9                         = New-Object system.Windows.Forms.Button
+$Button9.text                    = ""
+$Button9.width                   = 30
+$Button9.height                  = 30
+$Button9.location                = New-Object System.Drawing.Point(115,157)
+$Button9.Font                    = 'Microsoft Sans Serif,10'
+
+$Button10                        = New-Object system.Windows.Forms.Button
+$Button10.text                   = "reset"
+$Button10.width                  = 60
+$Button10.height                 = 30
+$Button10.location               = New-Object System.Drawing.Point(186,207)
+$Button10.Font                   = 'Microsoft Sans Serif,10'
+
+$Label1                        = New-Object System.Windows.Forms.Label
+$Label1.text                   = "Turn: Player 1"
+$Label1.width                  = 60
+$Label1.height                 = 30
+$Label1.location               = New-Object System.Drawing.Point(10,10)
+$Label1.Font                   = 'Microsoft Sans Serif,10'
+
+$Form.controls.AddRange(@($Button1,$Button2,$Button3,$Button4,$Button5,$Button6,$Button7,$Button8,$Button9,$Button10,$Label1))
+
+$Button10.Add_Click({
+    Set-Content $Path\TicTacToe\player.txt '1'
+    Set-Content $Path\TicTacToe\Board\1.txt '0'
+    Set-Content $Path\TicTacToe\Board\2.txt '0'
+    Set-Content $Path\TicTacToe\Board\3.txt '0'
+    Set-Content $Path\TicTacToe\Board\4.txt '0'
+    Set-Content $Path\TicTacToe\Board\5.txt '0'
+    Set-Content $Path\TicTacToe\Board\6.txt '0'
+    Set-Content $Path\TicTacToe\Board\7.txt '0'
+    Set-Content $Path\TicTacToe\Board\8.txt '0'
+    Set-Content $Path\TicTacToe\Board\9.txt '0'
+    $Button1.Text = ""
+    $Button2.Text = ""
+    $Button3.Text = ""
+    $Button4.Text = ""
+    $Button5.Text = ""
+    $Button6.Text = ""
+    $Button7.Text = ""
+    $Button8.Text = ""
+    $Button9.Text = ""
+    $Label1.Text = "Turn: Player 1"
+})
+
+function Cycle-Player{
+    $tempPlayer = Get-Content $Path\TicTacToe\player.txt 
+    if($tempPlayer -eq 1){
+        Set-Content $Path\TicTacToe\player.txt '2'
+        $Label1.Text = "Turn: Player 2"
+    }
+    else{
+        Set-Content $Path\TicTacToe\player.txt '1'
+        $Label1.Text = "Turn: Player 1"
+    }
+}
+
+$Button1.Add_Click({
+$tempPlayer = Get-Content $Path\TicTacToe\player.txt 
+$tempSpot = Get-Content $Path\TicTacToe\Board\1.txt
+    if($tempSpot -eq 0){
+        if($tempPlayer -eq 1){
+            $Button1.Text = "X"
+            Set-Content $Path\TicTacToe\Board\1.txt '1'
+        }
+        ElseIf($tempPlayer -eq 2){
+            $Button1.Text = "O"
+            Set-Content $Path\TicTacToe\Board\1.txt '2'
+        }
+        Cycle-Player
+    }
+})
+
+$Button2.Add_Click({
+$tempPlayer = Get-Content $Path\TicTacToe\player.txt 
+$tempSpot = Get-Content $Path\TicTacToe\Board\2.txt
+    if($tempSpot -eq 0){
+        switch ($tempPlayer){
+            1{
+                $Button2.Text = "X"
+                Set-Content $Path\TicTacToe\Board\2.txt '1'
+            }
+            2{
+                $Button2.Text = "O"
+                Set-Content $Path\TicTacToe\Board\2.txt '2'
+            }
+        }
+        Cycle-Player
+    }
+})
+
+$Button3.Add_Click({
+$tempPlayer = Get-Content $Path\TicTacToe\player.txt 
+$tempSpot = Get-Content $Path\TicTacToe\Board\3.txt
+    if($tempSpot -eq 0){
+        switch ($tempPlayer){
+            1{
+                $Button3.Text = "X"
+                Set-Content $Path\TicTacToe\Board\3.txt '1'
+            }
+            2{
+                $Button3.Text = "O"
+                Set-Content $Path\TicTacToe\Board\3.txt '2'
+            }
+        }
+        Cycle-Player
+    }
+})
+
+$Button4.Add_Click({
+$tempPlayer = Get-Content $Path\TicTacToe\player.txt 
+$tempSpot = Get-Content $Path\TicTacToe\Board\4.txt
+    if($tempSpot -eq 0){
+        switch ($tempPlayer){
+            1{
+                $Button4.Text = "X"
+                Set-Content $Path\TicTacToe\Board\4.txt '1'
+            }
+            2{
+                $Button4.Text = "O"
+                Set-Content $Path\TicTacToe\Board\4.txt '2'
+            }
+        }
+        Cycle-Player
+    }
+})
+
+$Button5.Add_Click({
+$tempPlayer = Get-Content $Path\TicTacToe\player.txt 
+$tempSpot = Get-Content $Path\TicTacToe\Board\5.txt
+    if($tempSpot -eq 0){
+        switch ($tempPlayer){
+            1{
+                $Button5.Text = "X"
+                Set-Content $Path\TicTacToe\Board\5.txt '1'
+            }
+            2{
+                $Button5.Text = "O"
+                Set-Content $Path\TicTacToe\Board\5.txt '2'
+            }
+        }
+        Cycle-Player
+    }
+})
+
+$Button6.Add_Click({
+$tempPlayer = Get-Content $Path\TicTacToe\player.txt 
+$tempSpot = Get-Content $Path\TicTacToe\Board\6.txt
+    if($tempSpot -eq 0){
+        switch ($tempPlayer){
+            1{
+                $Button6.Text = "X"
+                Set-Content $Path\TicTacToe\Board\6.txt '1'
+            }
+            2{
+                $Button6.Text = "O"
+                Set-Content $Path\TicTacToe\Board\6.txt '2'
+            }
+        }
+        Cycle-Player
+    }
+})
+
+$Button7.Add_Click({
+$tempPlayer = Get-Content $Path\TicTacToe\player.txt 
+$tempSpot = Get-Content $Path\TicTacToe\Board\7.txt
+    if($tempSpot -eq 0){
+        switch ($tempPlayer){
+            1{
+                $Button7.Text = "X"
+                Set-Content $Path\TicTacToe\Board\7.txt '1'
+            }
+            2{
+                $Button7.Text = "O"
+                Set-Content $Path\TicTacToe\Board\7.txt '2'
+            }
+        }
+        Cycle-Player
+    }
+})
+
+$Button8.Add_Click({
+$tempPlayer = Get-Content $Path\TicTacToe\player.txt 
+$tempSpot = Get-Content $Path\TicTacToe\Board\8.txt
+    if($tempSpot -eq 0){
+        switch ($tempPlayer){
+            1{
+                $Button8.Text = "X"
+                Set-Content $Path\TicTacToe\Board\8.txt '1'
+            }
+            2{
+                $Button8.Text = "O"
+                Set-Content $Path\TicTacToe\Board\8.txt '2'
+            }
+        }
+        Cycle-Player
+    }
+})
+
+$Button9.Add_Click({
+$tempPlayer = Get-Content $Path\TicTacToe\player.txt 
+$tempSpot = Get-Content $Path\TicTacToe\Board\9.txt
+    if($tempSpot -eq 0){
+        switch ($tempPlayer){
+            1{
+                $Button9.Text = "X"
+                Set-Content $Path\TicTacToe\Board\9.txt '1'
+            }
+            2{
+                $Button9.Text = "O"
+                Set-Content $Path\TicTacToe\Board\9.txt '2'
+            }
+        }
+        Cycle-Player
+    }
+})
+
+$Form.ShowDialog()
